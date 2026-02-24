@@ -1,0 +1,30 @@
+# OS
+.DS_Store
+
+# Editors
+.vscode/
+.idea/
+
+# Go build/test artifacts
+*.test
+*.out
+*.prof
+*.pprof
+coverage.out
+cover.out
+
+# Go binaries
+/gen-dto
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Go workspace files
+go.work
+go.work.sum
+
+# Project outputs
+dist/
+tmp/

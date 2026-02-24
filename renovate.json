@@ -1,0 +1,40 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "timezone": "Asia/Tokyo",
+  "labels": [
+    "dependencies",
+    "renovate"
+  ],
+  "enabledManagers": [
+    "gomod",
+    "github-actions"
+  ],
+  "packageRules": [
+    {
+      "description": "Always keep go directive in go.mod up to date",
+      "matchManagers": [
+        "gomod"
+      ],
+      "matchDepNames": [
+        "go"
+      ],
+      "rangeStrategy": "replace",
+      "automerge": true,
+      "automergeType": "pr"
+    },
+    {
+      "description": "Keep setup-go action updated",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchPackageNames": [
+        "actions/setup-go"
+      ],
+      "automerge": true,
+      "automergeType": "pr"
+    }
+  ]
+}
