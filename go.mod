@@ -3,7 +3,7 @@ module github.com/seitarof/gen-dto
 go 1.26.0
 
 require (
-	github.com/spf13/pflag v1.0.6
+	github.com/spf13/pflag v1.0.10
 	golang.org/x/tools v0.38.0
 )
 
