@@ -1,43 +1,38 @@
 # gen-dto
 
-`gen-dto` is a Go CLI that generates DTO conversion code between structs via `go:generate`.
+<p align="center">
+  <img src="docs/assets/icon.png" alt="gen-dto logo" width="320" />
+</p>
 
-It is designed for reducing repetitive mapping code and currently generates **both directions in one file**:
+<p align="center">
+  Generate bidirectional DTO converters for Go structs.
+</p>
 
-- `A -> B`
-- `B -> A`
+<p align="center">
+  <a href="https://github.com/seitarof/gen-dto/actions/workflows/ci.yml"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/seitarof/gen-dto/ci.yml?branch=main&label=ci"></a>
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-blue.svg"></a>
+  <img alt="Go Version" src="https://img.shields.io/badge/go-1.26+-00ADD8?logo=go">
+</p>
 
-## Features
+`gen-dto` is a CLI tool that generates conversion code between Go structs using `go:generate`.
 
-- Generate conversion functions from source/destination struct types
+## Highlights
+
+- Generates both directions in one file (`A -> B` and `B -> A`)
 - Case-insensitive field matching
-- `--ignore-fields` support
-- Type alias field support (for example `type X = otherpkg.Y`)
-- Recursive nested struct conversion generation (in the same package path)
-- Built-in conversion rules:
-  - Same type assignment
-  - Basic casts (for convertible basic types)
-  - Pointer wrap/unwrap
-  - `database/sql.Null*` <-> value conversions
-  - `time.Time` <-> `string` conversions (`RFC3339`)
-  - Slice element conversion
-  - `Stringer` to `string`
-  - Assignable/Convertible fallback
-- Import formatting via `goimports`
-
-## Supported Go Version
-
-- **Go 1.26.x**
-
-The repository tracks Go via `go.mod` and CI uses `actions/setup-go` with `go-version-file: go.mod` and `check-latest: true`.
+- Supports type aliases (`type X = otherpkg.Y`)
+- Recursively handles nested structs (including same-module cross-package types)
+- Leaves unsupported fields as TODO comments without blocking other conversions
 
 ## Installation
+
+### go install
 
 ```bash
 go install github.com/seitarof/gen-dto/cmd/gen-dto@latest
 ```
 
-Homebrew:
+### Homebrew
 
 ```bash
 brew tap seitarof/homebrew-tap
@@ -45,8 +40,6 @@ brew install gen-dto
 ```
 
 ## Quick Start
-
-Add `go:generate` to your code:
 
 ```go
 //go:generate gen-dto \
@@ -58,82 +51,34 @@ Add `go:generate` to your code:
 //  --ignore-fields=Password,SecretKey
 ```
 
-Run:
-
 ```bash
 go generate ./...
 ```
 
-A single output file will include both directions, for example:
+## CLI
 
-- `ConvertUserToUserResponse`
-- `ConvertUserResponseToUser`
+Required flags:
 
-If source/destination type names are the same but package paths differ, generated function names include package tokens to avoid collisions, for example:
+- `--src-type`, `-s`
+- `--src-path`
+- `--dst-type`, `-d`
+- `--dst-path`
+- `--filename`, `-o`
 
-- `ConvertSourceAddressToDestAddress`
-- `ConvertDestAddressToSourceAddress`
+Optional flags:
 
-## CLI Options
+- `--ignore-fields`
+- `--func-name` (forward root conversion name)
+- `--version`, `-v`
 
-Required:
+## Supported Go Version
 
-- `--src-type`, `-s`: source struct type name
-- `--src-path`: source package path
-- `--dst-type`, `-d`: destination struct type name
-- `--dst-path`: destination package path
-- `--filename`, `-o`: output file path
+- Go `1.26.x`
 
-Optional:
+## Documentation
 
-- `--ignore-fields`: comma-separated field names to ignore
-- `--func-name`: custom function name for the **forward root** conversion only
-- `--version`, `-v`: print version
-
-## Development
-
-Run tests:
-
-```bash
-go test ./...
-```
-
-Run benchmarks (including memory allocations):
-
-```bash
-go test -run '^$' -bench . -benchmem \
-  ./internal/cli \
-  ./internal/parser \
-  ./internal/resolver \
-  ./internal/generator
-```
-
-## CI
-
-GitHub Actions workflows are included:
-
-- CI: format check, `go vet`, `go test`
-- Benchmark workflow: benchmark execution and artifact upload
-- Release workflow: GoReleaser release on `v*` tags
-
-## Dependency Updates
-
-Renovate config is included (`renovate.json`) and configured to:
-
-- keep Go module dependencies up to date
-- keep GitHub Actions dependencies up to date
-- keep the Go directive in `go.mod` updated
-
-## Release Notes
-
-Releases are handled by GoReleaser via `.goreleaser.yaml`.
-
-For Homebrew publication, set this repository secret:
-
-- `HOMEBREW_TAP_GITHUB_TOKEN`: PAT with push access to `seitarof/homebrew-tap`
+- Contributor guide: [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## License
 
-This project is licensed under the MIT License.
-
-See [LICENSE](LICENSE).
+MIT License. See [LICENSE](LICENSE).
